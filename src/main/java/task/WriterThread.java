@@ -14,16 +14,15 @@ public class WriterThread implements Runnable {
         this.file = file;
     }
 
-    @Override
-    public void run() {
+    public void run(){
         synchronized (file) {
             while (true) {
                 try {
                     Files.write(file.toPath(), List.of("Hello!", "Lera"));
-                    System.out.println("Writer wrote down the text");
+//                    System.out.println("Writer wrote down the text");
                     file.notifyAll();
                     file.wait();
-                } catch (IOException | InterruptedException e) {
+                } catch (InterruptedException | IOException e) {
                     e.printStackTrace();
                 }
             }

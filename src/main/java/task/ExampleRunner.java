@@ -1,5 +1,7 @@
 package task;
 
+import exception.MyThread;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -10,8 +12,12 @@ public class ExampleRunner {
         System.out.println(file.createNewFile());
         Thread threadwrite=new Thread(new WriterThread(file));
         Thread threadread=new Thread(new ReaderThread(file));
+        MyThread myThread=new MyThread();
+//        myThread.setUncaughtExceptionHandler((t,e)-> System.out.println("Поймано исключение: "+ e.getMessage()));
+        myThread.start();
         threadwrite.start();
         threadread.start();
+        myThread.join();
         threadwrite.join();
         threadread.join();
     }
