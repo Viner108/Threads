@@ -16,16 +16,11 @@ public class WriterThread implements Runnable {
 
     public void run(){
         synchronized (file) {
-            while (true) {
-                try {
-                    Files.write(file.toPath(), List.of("Hello!", "Lera"));
-//                    System.out.println("Writer wrote down the text");
-                    file.notifyAll();
-                    file.wait();
-                } catch (InterruptedException | IOException e) {
+                try (BufferedWriter writer=new BufferedWriter(new FileWriter(file))){
+                    writer.write("Hello, Lera!");
+                } catch ( IOException e) {
                     e.printStackTrace();
                 }
-            }
         }
     }
 }

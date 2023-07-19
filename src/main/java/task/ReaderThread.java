@@ -15,16 +15,15 @@ public class ReaderThread implements Runnable {
     @Override
     public void run(){
         synchronized (file) {
-            while (true) {
-                try (Stream<String> lines = Files.lines(file.toPath())) {
-                    lines.forEach(System.out::println);
+                try (BufferedReader reader=new BufferedReader(new FileReader(file))){
+                    String s;
+                    while((s=reader.readLine())!=null){
+                        System.out.println(s);
+                    }
 //                    System.out.println("Reader read the text");
-                    file.notifyAll();
-                    file.wait();
-                } catch (IOException | InterruptedException e){
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
         }
     }
 }

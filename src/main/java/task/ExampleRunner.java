@@ -1,24 +1,22 @@
 package task;
 
 import exception.MyThread;
+import tproger.Thread1;
 
 import java.io.File;
 import java.io.IOException;
 
 public class ExampleRunner {
+    volatile static  File file=new File("task/file.txt");
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        File file=new File("task/file.txt");
-        System.out.println(file.createNewFile());
         Thread threadwrite=new Thread(new WriterThread(file));
+        Thread threadRaW=new Thread(new ReadAndWriteThread(file));
         Thread threadread=new Thread(new ReaderThread(file));
-        MyThread myThread=new MyThread();
-//        myThread.setUncaughtExceptionHandler((t,e)-> System.out.println("Поймано исключение: "+ e.getMessage()));
-        myThread.start();
         threadwrite.start();
-        threadread.start();
-        myThread.join();
+        threadRaW.start();
         threadwrite.join();
-        threadread.join();
+        threadRaW.join();
+        threadread.start();
     }
 }
